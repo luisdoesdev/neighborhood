@@ -8,18 +8,47 @@ function initMap() {
             self.allLocations.push(new Place(place));
         });    
         
-        
+        //Create the markers
+        self.allLocations.forEach(function(place) {
+          var markerOptions = {
+            map: map,
+            position: place.latLng,
+            animation: google.maps.Animation.DROP,
+          };
+          place.marker = new google.maps.Marker(markerOptions);
+        });
 
+
+        self.visiblePlaces = ko.observableArray()
+     
         self.userInput = ko.observable("")
         
-        //add Search Funtion
+        //add Search Function
+        // The userinput value string characters must match in order to be pushed into the 
+        //visible places array
         self.filterMarkers = ko.computed(function(){
             let userInput = self.userInput().toLowerCase();
+            
+            self.visiblePlaces.removeAll()
 
-            console.log(userInput)
+            self.allLocations.forEach(function(place){
+              place.marker.setMap(null);
+             
+              if (place.title.toLowerCase().indexOf(userInput) !== -1) {
+                self.visiblePlaces.push(place);
+              }
 
-        },this)
+            })
 
+            // add the markers into the map
+            self.visiblePlaces().forEach(function(place) {
+              place.marker.setMap(map);
+            });
+          
+                },this)
+
+
+        
         // Organize data into a Place Constructor
         function Place(dataObj) {
             this.title = dataObj.title;
@@ -59,20 +88,12 @@ function initMap() {
     ]
 
 
-    const washingtonDC = {lat:38.9072, lng:-77.0369};  
+    
     map = new google.maps.Map(document.getElementById('map'), {
     center: locations[1].latLng,
     zoom: 13
   });
 
-  // Add Multiplle Markers
-  //Search Ability
-  //Display Info
-
-  const marker = new google.maps.Marker({
-    position: washingtonDC,
-    map: map
-  });
 
 
 
