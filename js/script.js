@@ -1,16 +1,16 @@
 let map;
 function initMap() {
-    const viewModel = function(locations){
+    const viewModel = function(locations,map){
         let self = this;
 
         self.allLocations = [];
         locations.forEach(function(place) {
             self.allLocations.push(new Place(place));
         });    
-        console.log(self.allLocations[1].title)
+        
         
 
-        self.userInput = ko.observable("Search")
+        self.userInput = ko.observable("")
         
         //add Search Funtion
         self.filterMarkers = ko.computed(function(){
@@ -61,7 +61,7 @@ function initMap() {
 
     const washingtonDC = {lat:38.9072, lng:-77.0369};  
     map = new google.maps.Map(document.getElementById('map'), {
-    center: washingtonDC,
+    center: locations[1].latLng,
     zoom: 13
   });
 
@@ -76,6 +76,6 @@ function initMap() {
 
 
 
-  ko.applyBindings(new viewModel(locations))
+  ko.applyBindings(new viewModel(locations, map))
 
 }
