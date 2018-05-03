@@ -10,10 +10,16 @@ function initMap() {
         
         //Create the markers
         self.allLocations.forEach(function(place) {
-          var markerOptions = {
+
+          const infowindow = new google.maps.InfoWindow({
+            content: place.title,
+          });
+
+          const markerOptions = {
             map: map,
             position: place.latLng,
             animation: google.maps.Animation.DROP,
+            infowindow: infowindow
           };
           place.marker = new google.maps.Marker(markerOptions);
         });
@@ -55,6 +61,28 @@ function initMap() {
           } 
 
 
+        self.visiblePlaces().forEach(function(place){
+          let marker = place.marker
+         
+          //add  markers info Window
+          google.maps.event.addListener(marker, 'click', function() {
+           // Clean Markers
+            self.removeMarkers(map)
+          // Center marker
+          map.setCenter(marker.getPosition());
+          //open infowindow  
+            this.infowindow.open(map, this);
+          });
+          
+        })  
+
+        self.removeMarkers = function(map){
+          self.visiblePlaces().forEach(function(place) {
+            let marker = place.marker
+            marker.infowindow.close(map, marker);
+         }); 
+        }
+
         
         // Organize data into a Place Constructor
         function Place(dataObj) {
@@ -63,27 +91,6 @@ function initMap() {
             this.marker = null;
           }
 
-       /*
-       self.filterMarkers = function() {
-    var searchInput = self.userInput().toLowerCase();
-
-    self.visiblePlaces.removeAll();
-
-    self.allPlaces.forEach(function(place) {
-      place.marker.setMap(null);
-
-      if (place.name.toLowerCase().indexOf(searchInput) !== -1) {
-        self.visiblePlaces.push(place);
-      }
-    });
-
-    self.visiblePlaces().forEach(function(place) {
-      place.marker.setMap(self.googleMap);
-    });
-  };]
-       
-       
-       */
 
     }
 
