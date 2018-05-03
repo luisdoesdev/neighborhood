@@ -34,6 +34,8 @@ function initMap() {
             self.allLocations.forEach(function(place){
               place.marker.setMap(null);
              
+
+             
               if (place.title.toLowerCase().indexOf(userInput) !== -1) {
                 self.visiblePlaces.push(place);
               }
@@ -44,8 +46,13 @@ function initMap() {
             self.visiblePlaces().forEach(function(place) {
               place.marker.setMap(map);
             });
+            
+          },this)
           
-                },this)
+          self.selection = ko.observable()
+          self.selectionCall = function(event){
+            console.log(self.selection())
+          } 
 
 
         
