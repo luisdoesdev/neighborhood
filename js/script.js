@@ -60,9 +60,25 @@ function initMap() {
             console.log(self.selection())
           } 
 
+        
+          self.visiblePlacesLength = ko.computed(function(){
+           let userinput = self.userInput()
+           let visiblePlaces = self.visiblePlaces()
+          if(userinput === ""){
+
+            return "Select a Spot"
+          }
+          else if( userinput !== -1){
+            return "results for " +  userinput +" :  " + visiblePlaces.length
+          }
+
+
+          })
+
 
         self.visiblePlaces().forEach(function(place){
           let marker = place.marker
+          
          
           //add  markers info Window
           google.maps.event.addListener(marker, 'click', function() {
