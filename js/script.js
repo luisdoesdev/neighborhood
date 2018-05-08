@@ -2,7 +2,7 @@ let map;
 function initMap() {
     const viewModel = function(locations,map){
         let self = this;
-
+      console.log(array)
         self.allLocations = [];
         locations.forEach(function(place) {
             self.allLocations.push(new Place(place));
@@ -12,7 +12,7 @@ function initMap() {
         self.allLocations.forEach(function(place) {
 
           const infowindow = new google.maps.InfoWindow({
-            content: place.title,
+            content: place.name,
           });
 
           const markerOptions = {
@@ -42,7 +42,7 @@ function initMap() {
              
 
              
-              if (place.title.toLowerCase().indexOf(userInput) !== -1) {
+              if (place.name.toLowerCase().indexOf(userInput) !== -1) {
                 self.visiblePlaces.push(place);
               }
 
@@ -102,8 +102,9 @@ function initMap() {
         
         // Organize data into a Place Constructor
         function Place(dataObj) {
-            this.title = dataObj.title;
+            this.name = dataObj.name;
             this.latLng = dataObj.latLng;
+            this.isOpen = dataObj.isOpen
             this.marker = null;
           }
 
@@ -117,16 +118,80 @@ function initMap() {
         {title:"United States Capitol",    latLng: {lat:38.8899, lng:-77.0091}}
     ]
 
+let array = []
+// API Fetch and error handlers
 
+function callApi() {
+      return new Promise(
+        data =>{
+          let url = "https://api.foursquare.com/v2/venues/explore?near=DC&oauth_token=RESIPMEAGVEW15LFDBO5Z24PCGEF4SBG4FFCLXRNJA12NJKK&v=20180507"
+          
+          
+
+        fetch(url)
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(myJson) {
+          let center = myJson.response.geocode.center
+          let places = myJson.response.groups[0].items
+          placesArray  = [] 
+
+          places.forEach(function(place){
+            let placeVenue = place.venue
+
+            // Organize data into a Place Constructor
+            function Place(dataObj) {
+              this.name = dataObj.name;
+              this.open = dataObj.hours.isOpen;
+              this.url = dataObj.url;
+              this.latLng = {lat:dataObj.location.lat, lng:dataObj.location.lng};
+              
+            }
+
+            placesArray.push(new Place(placeVenue))
+
+         
+          })
+
+         return data( [{center:center} , placesArray])
+          
+        
+        });
+
+              
+      
+      }
+        
+        
+      )
+      
+    }
+   
+  
+        
+      
     
-    map = new google.maps.Map(document.getElementById('map'), {
-    center: locations[1].latLng,
-    zoom: 13
-  });
+ 
+    
+    
+    
+    
+    
+    async function koStart(){
+      
+      //console.log(await callApi())
+      let loc = await callApi()
+
+      console.log(loc[1])
+          map = new google.maps.Map(document.getElementById('map'), {
+          center: loc[0].center,
+          zoom: 13
+        });
+  //array.push(await callApi())
 
 
-
-
-  ko.applyBindings(new viewModel(locations, map))
-
+  ko.applyBindings(new viewModel(loc[1], map))
+ }
+ koStart()
 }
