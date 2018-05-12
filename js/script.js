@@ -57,10 +57,16 @@ function initMap() {
           
           self.selection = ko.observable()
           self.selectionCall = function(event){
-            console.log(self.selection())
-          } 
+              marker = self.selection().marker
+              google.maps.event.trigger(marker, 'click')
 
-        
+              
+            
+
+          } 
+          self.selection(self.visiblePlaces([1]))
+          console.log(self.selection())
+          
           self.visiblePlacesLength = ko.computed(function(){
            let userinput = self.userInput()
            let visiblePlaces = self.visiblePlaces()
@@ -79,19 +85,27 @@ function initMap() {
         self.visiblePlaces().forEach(function(place){
           let marker = place.marker
           
-         
+          
           //add  markers info Window
           google.maps.event.addListener(marker, 'click', function() {
+            
            // Clean Markers
             self.removeMarkers(map)
           // Center marker
           map.setCenter(marker.getPosition());
           //open infowindow  
             this.infowindow.open(map, this);
+
+            console.log(this)
+
           });
+          
+          
+
           
         })  
 
+   
         self.removeMarkers = function(map){
           self.visiblePlaces().forEach(function(place) {
             let marker = place.marker
