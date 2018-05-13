@@ -13,7 +13,7 @@ function initMap() {
 
     //Create the markers and add the content to the infowidow
     self.allLocations.forEach(function (place) {
-      console.log(place.url)
+    
 
       const infowindow = new google.maps.InfoWindow({
         content: '<p class="h6">' + place.name + '</p>' + "<br>" + '<a href="' + place.url + '">' + " website" + '</a>'
@@ -149,9 +149,8 @@ function initMap() {
 
 
         fetch(url)
-          .then(function (response) {
-            return response.json();
-          })
+          .then(response => response.json()
+          )
 
           .then(function (myJson) {
             let center = myJson.response.geocode.center
@@ -206,10 +205,10 @@ function initMap() {
 
 
 
-
+// Async then start knockout 
   async function koStart() {
 
-    //console.log(await callApi())
+    
     let loc = await callApi()
 
 
@@ -217,7 +216,7 @@ function initMap() {
       center: loc[0].center,
       zoom: 13
     });
-    //array.push(await callApi())
+  
 
 
     ko.applyBindings(new viewModel(loc[1], map))
