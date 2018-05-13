@@ -144,22 +144,29 @@ function initMap() {
   function callApi() {
     return new Promise(
       data => {
-        let url = API_URL
+        let url = "API_URL"
 
 
 
         fetch(url)
-          .then(response => response.json()
-          )
+          .then(response => response.json())
 
           .then(function (myJson) {
-            let center = myJson.response.geocode.center
-            let places = myJson.response.groups[0].items
-            placesArray = []
+            let geocode = myJson.meta.code
+           
+            
+            if (geocode === 400) {
+              $(document).ready(function () {
+                $("body").empty()
+                $("body").append("<p class='h1 mt-5 text-center'>"+ "Error " + geocode + "</br>   Oh No I failed you :( </p>" + "<p class='h4 text-muted text-center'>I was not able to connect to the database <br> Please try again later</p>")
+              })
+            }
+            else {
 
-            places.forEach(function (place) {
-              let placeVenue = place.venue
-
+              let center = myJson.response.geocode.center
+              let places = myJson.response.groups[0].items
+              placesArray = []
+              
               // Organize data into a Place Constructor
               function Place(dataObj) {
                 this.id = dataObj.id;
@@ -167,24 +174,27 @@ function initMap() {
                 this.open = dataObj.hours.isOpen;
                 this.url = dataObj.url;
                 this.latLng = { lat: dataObj.location.lat, lng: dataObj.location.lng };
-
+                
               }
+              places.forEach(function (place) {
+                
+                // Create the new object with the contructor and the push into the array
+                placesArray.push(new Place(place.venue))
+                
+              })
+              
+              return data([{ center: center }, placesArray])
+            }
 
-              placesArray.push(new Place(placeVenue))
-
-
-            })
-
-            return data([{ center: center }, placesArray])
-
-
-          }).catch(function (error) {
+          })
+          .catch(function (error) {
             console.log(error)
             $(document).ready(function () {
               $("body").empty()
-              $("body").append("<p class='h1 mt-5 text-center'> Oh No I failed you :( </p>" + "<p class='h4 text-muted text-center'>I am experinecing an error <br> don't worry the code monkey is working on it</p>")
+              $("body").append("<p class='h1 mt-5 text-center'> Oh No I failed you :( </p>" + "<p class='h4 text-muted text-center'>I am experiencing an error <br> don't worry the code monkey is working on it</p>")
             })
           });
+
 
 
 
@@ -224,4 +234,8 @@ function initMap() {
 
 
   koStart()
+}
+
+function googleError(){
+  alert("google error")
 }
