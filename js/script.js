@@ -144,8 +144,7 @@ function initMap() {
   function callApi() {
     return new Promise(
       data => {
-        let url = "API_URL"
-
+        let url = API_URL
 
 
         fetch(url)

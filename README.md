@@ -10,7 +10,7 @@ The intention of the app is not to be pretty but rather functional, it is part f
 
 
 ### APIs
- Google Maps and foursquare    
+ Google Maps and foursquare(Paste API_URL on the script.js)    
 
 ### Starting the App
     This app is not using any external libraries other than boostrap, knockout and google maps and they are connected with a cdn
