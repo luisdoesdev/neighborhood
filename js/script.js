@@ -1,146 +1,155 @@
 
 let map;
 
-function initMap() {
-  const viewModel = function (locations, map) {
-    let self = this;
+const viewModel = function (locations, map) {
+  let self = this;
 
-    self.allLocations = [];
-    locations.forEach(function (place) {
-      self.allLocations.push(place);
+  self.allLocations = [];
+  locations.forEach(function (place) {
+    self.allLocations.push(place);
+  });
+
+
+  //Create the markers and add the content to the infowidow
+  self.allLocations.forEach(function (place) {
+  
+
+    const infowindow = new google.maps.InfoWindow({
+      content: '<p class="h6">' + place.name + '</p>' + "<br>" + '<a href="' + place.url + '">' + " website" + '</a>'
     });
 
+    const markerOptions = {
+      map: map,
+      position: place.latLng,
+      animation: google.maps.Animation.DROP,
+      infowindow: infowindow,
+     
+    };
+    place.marker = new google.maps.Marker(markerOptions);
+  });
 
-    //Create the markers and add the content to the infowidow
+
+
+  // Output after the filter Places that can bee seen on the map after user input
+  self.visiblePlaces = ko.observableArray()
+  self.userInput = ko.observable("")
+
+
+
+  //add Search Function
+  // The userinput value string characters must match in order to be pushed into the 
+  //visible places array
+  self.filterMarkers = ko.computed(function () {
+    let userInput = self.userInput().toLowerCase();
+
+    self.visiblePlaces.removeAll()
+
     self.allLocations.forEach(function (place) {
-    
-
-      const infowindow = new google.maps.InfoWindow({
-        content: '<p class="h6">' + place.name + '</p>' + "<br>" + '<a href="' + place.url + '">' + " website" + '</a>'
-      });
-
-      const markerOptions = {
-        map: map,
-        position: place.latLng,
-        animation: google.maps.Animation.DROP,
-        infowindow: infowindow
-      };
-      place.marker = new google.maps.Marker(markerOptions);
-    });
+      place.marker.setMap(null);
 
 
 
-    // Output after the filter Places that can bee seen on the map after user input
-    self.visiblePlaces = ko.observableArray()
-    self.userInput = ko.observable("")
-
-
-
-    //add Search Function
-    // The userinput value string characters must match in order to be pushed into the 
-    //visible places array
-    self.filterMarkers = ko.computed(function () {
-      let userInput = self.userInput().toLowerCase();
-
-      self.visiblePlaces.removeAll()
-
-      self.allLocations.forEach(function (place) {
-        place.marker.setMap(null);
-
-
-
-        if (place.name.toLowerCase().indexOf(userInput) !== -1) {
-          self.visiblePlaces.push(place);
-        }
-
-      })
-
-      // add the markers into the map
-      self.visiblePlaces().forEach(function (place) {
-        place.marker.setMap(map);
-      });
-
-    }, this)
-
-
-    // Handle the user selection
-    self.selection = ko.observable()
-    self.selectionCall = function (event) {
-      // click the marker based on this selection
-      if (event === undefined) {
-        console.log("NOt FounD")
+      if (place.name.toLowerCase().indexOf(userInput) !== -1) {
+        self.visiblePlaces.push(place);
       }
-      marker = self.selection().marker
-      google.maps.event.trigger(marker, 'click')
-
-    }
-    self.selection(self.visiblePlaces([1]))
-
-
-    self.visiblePlacesLength = ko.computed(function () {
-      let userinput = self.userInput()
-      let visiblePlaces = self.visiblePlaces()
-      if (userinput === "") {
-
-        return "Select a Spot"
-      }
-
-      if (visiblePlaces.length === 0){
-        return "Sorry no results for " + userinput + " :("
-      }
-
-      else if (userinput !== -1) {
-      
-        return "results for " + userinput + " :  " + visiblePlaces.length
-      }
-
 
     })
 
-
+    // add the markers into the map
+    let bound = new google.maps.LatLngBounds();
     self.visiblePlaces().forEach(function (place) {
-      let marker = place.marker
+      place.marker.setMap(map);
+      bound.extend(place.marker.getPosition())
+      
+    });
+    // Zoom and fit to the markers avilable position
+    map.fitBounds(bound)
+  }, this)
 
 
-      //add  markers info Window
-      google.maps.event.addListener(marker, 'click', function () {
-
-        // close all infoWindows
-        self.closeInfoWindows(map)
-
-        // Center marker
-        map.setCenter(marker.getPosition());
-
-        // Bounce
-        this.setAnimation(google.maps.Animation.BOUNCE)
-        setTimeout(function(){ marker.setAnimation(null); }, 750);
-
-        //open infowindow  
-        this.infowindow.open(map, this);
-
-
-
-
-
-      });
-
-
-
-
-    })
-
-
-    self.closeInfoWindows = function (map) {
-      self.visiblePlaces().forEach(function (place) {
-        let marker = place.marker
-        marker.infowindow.close(map, marker);
-      });
+  // Handle the user selection
+  self.selection = ko.observable()
+  self.selectionCall = function (event) {
+    // click the marker based on this selection
+    if (event === undefined) {
+      console.log("NOt FounD")
     }
-
-
-
+    marker = self.selection().marker
+    google.maps.event.trigger(marker, 'click')
 
   }
+  self.selection(self.visiblePlaces([1]))
+
+
+  self.visiblePlacesLength = ko.computed(function () {
+    let userinput = self.userInput()
+    let visiblePlaces = self.visiblePlaces()
+    if (userinput === "") {
+
+      return "Select a Spot"
+    }
+
+    if (visiblePlaces.length === 0){
+      return "Sorry no results for " + userinput + " :("
+    }
+
+    else if (userinput !== -1) {
+    
+      return "results for " + userinput + " :  " + visiblePlaces.length
+    }
+
+
+  })
+
+
+  self.visiblePlaces().forEach(function (place) {
+    let marker = place.marker
+
+
+    //add  markers info Window
+    google.maps.event.addListener(marker, 'click', function () {
+      
+
+      // close all infoWindows
+      self.closeInfoWindows(map)
+
+      // Center marker
+      map.setCenter(marker.getPosition());
+      map.setZoom(12)
+      
+
+      // Bounce
+      this.setAnimation(google.maps.Animation.BOUNCE)
+      setTimeout(function(){ marker.setAnimation(null); }, 750);
+
+      //open infowindow  
+      this.infowindow.open(map, this);
+
+
+
+
+
+
+    });
+
+
+
+
+  })
+
+
+  self.closeInfoWindows = function (map) {
+    self.visiblePlaces().forEach(function (place) {
+      let marker = place.marker
+      marker.infowindow.close(map, marker);
+    });
+  }
+
+
+
+
+}
+function initMap() {
 
 
 
@@ -157,7 +166,9 @@ function initMap() {
   function callApi() {
     return new Promise(
       data => {
-        let url = ""
+        let url = "https://api.foursquare.com/v2/venues/explore?near=DC&oauth_token=RESIPMEAGVEW15LFDBO5Z24PCGEF4SBG4FFCLXRNJA12NJKK&v=20180507"
+
+
 
 
 
