@@ -157,7 +157,7 @@ function initMap() {
   function callApi() {
     return new Promise(
       data => {
-        let url = "https://api.foursquare.com/v2/venues/explore?near=DC&oauth_token=RESIPMEAGVEW15LFDBO5Z24PCGEF4SBG4FFCLXRNJA12NJKK&v=20180507"
+        let url = ""
 
 
 
