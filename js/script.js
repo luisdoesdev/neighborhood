@@ -67,6 +67,9 @@ function initMap() {
     self.selection = ko.observable()
     self.selectionCall = function (event) {
       // click the marker based on this selection
+      if (event === undefined) {
+        console.log("NOt FounD")
+      }
       marker = self.selection().marker
       google.maps.event.trigger(marker, 'click')
 
@@ -81,7 +84,13 @@ function initMap() {
 
         return "Select a Spot"
       }
+
+      if (visiblePlaces.length === 0){
+        return "Sorry no results for " + userinput + " :("
+      }
+
       else if (userinput !== -1) {
+      
         return "results for " + userinput + " :  " + visiblePlaces.length
       }
 
@@ -101,6 +110,10 @@ function initMap() {
 
         // Center marker
         map.setCenter(marker.getPosition());
+
+        // Bounce
+        this.setAnimation(google.maps.Animation.BOUNCE)
+        setTimeout(function(){ marker.setAnimation(null); }, 750);
 
         //open infowindow  
         this.infowindow.open(map, this);
@@ -144,7 +157,8 @@ function initMap() {
   function callApi() {
     return new Promise(
       data => {
-        let url = API_URL
+        let url = "https://api.foursquare.com/v2/venues/explore?near=DC&oauth_token=RESIPMEAGVEW15LFDBO5Z24PCGEF4SBG4FFCLXRNJA12NJKK&v=20180507"
+
 
 
         fetch(url)
