@@ -1,6 +1,13 @@
 
-let map;
+'use strict'
 
+
+let map;
+//Model
+let placesArray = [];
+
+
+//View Model
 const viewModel = function (locations, map) {
   let self = this;
 
@@ -63,7 +70,16 @@ const viewModel = function (locations, map) {
 
     // add the markers into the map
     let bound = new google.maps.LatLngBounds();
+   
+    //handle bounds when array empty
+    if (self.visiblePlaces().length === 0){
+      bound.extend({lat:38.9072, lng:-77.0369})
+            
+    }
     self.visiblePlaces().forEach(function (place) {
+      console.log(place)
+
+      
       place.marker.setMap(map);
       bound.extend(place.marker.getPosition());
 
@@ -103,11 +119,8 @@ const viewModel = function (locations, map) {
     else if (userinput !== -1) {
 
       return "results for " + userinput + " :  " + visiblePlaces.length;
-    }
-
-
+    } 
   });
-
 
   self.visiblePlaces().forEach(function (place) {
     let marker = place.marker;
@@ -158,18 +171,18 @@ const viewModel = function (locations, map) {
 };
 
 
-
+//Function to load map and start up app  
 function initMap() {
 
+  // start Map 
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat:38.9072, lng:-77.0369},
+    zoom: 13
+  });
 
 
 
-  const locations = [
-    { title: "Smithsonian Space Musem", latLng: { lat: 38.8882, lng: -77.0199 } },
-    { title: "United States Capitol", latLng: { lat: 38.8899, lng: -77.0091 } }
-  ];
 
-  let array = [];
 
 
   // API Fetch and error handlers
@@ -209,7 +222,7 @@ function initMap() {
               let places = myJson.response.groups[0].items;
 
 
-              placesArray = [];
+               
 
 
               places.forEach(function (place) {
@@ -244,25 +257,13 @@ function initMap() {
 
 
 
-
-
-
-
-
-
-
   // Async then start knockout 
 
   async function koStart() {
 
     let loc = await callApi();
 
-
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: loc[0].center,
-      zoom: 13
-    });
-
+  
 
 
     ko.applyBindings(new viewModel(loc[1], map));
