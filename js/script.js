@@ -77,9 +77,7 @@ const viewModel = function (locations, map) {
             
     }
     self.visiblePlaces().forEach(function (place) {
-      console.log(place)
-
-      
+         
       place.marker.setMap(map);
       bound.extend(place.marker.getPosition());
 
