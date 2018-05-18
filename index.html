@@ -1,58 +1,65 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title> 
-        My Neighborhood
-    </title>
 
-    <!-- Bootstrap CSS, Local Style -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css">
-    <title>My Neighborhood</title>
-  </head>
-  <body>
-      <!-- As a heading -->
-      <nav class="navbar navbar-light bg-light">
-        <span class="navbar-brand mb-0 h1">Neighborhood</span>
-        <input class="form-control mr-sm-2" type="search" name="search"  placeholder="search for place" data-bind="value: userInput" id="">
-       
-       <!--Droownd has all the locations-->
-       
-            
-       <div class="input-group mb-3">
-         
-            
-               <select class="custom-select" data-bind="options:visiblePlaces, optionsText:'name', optionsCaption:visiblePlacesLength ,value: selection, event:{change:selectionCall}, css: 'name' " id="inputGroupSelect01">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-           
-             
-              </select>
-            </div>
+
+  <!-- Bootstrap CSS, Local Style -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <title>My Neighborhood</title>
+</head>
+
+<body>
+  <!-- As a heading -->
+  <nav class="navbar navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">Neighborhood</span>
+    <input class="form-control mr-sm-2" type="search" name="search" placeholder="search for place" data-bind="value: userInput">
+
+    <!--Droownd has all the locations-->
+
+
+    <div class="input-group mb-3">
+
+
+      <select class="custom-select" data-bind="options:visiblePlaces, optionsText:'name', optionsCaption:visiblePlacesLength ,value: selection, event:{change:selectionCall}, css: 'name' "
+        id="inputGroupSelect01">
 
 
 
-      </nav>
-      
-      <div id="map"></div>
-      
-    
+      </select>
+    </div>
 
 
 
-    
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Knockout, then Maps and the script-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>    
-   
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
-    <script src="js/script.js"></script>
-    <!--- Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYdSSrho3obP18g8Lrgh222P62WJZM3Lk&callback=initMap" onerror="googleError()"
+    <span class="text-muted">powered by: foursquare</span>
+  </nav>
+
+  <div id="map"></div>
+
+
+
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Knockout, then Maps and the script-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+    crossorigin="anonymous"></script>
+  <script src="js/script.js"></script>
+  <!--- Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYdSSrho3obP18g8Lrgh222P62WJZM3Lk&callback=initMap" onerror="googleError()"
     async defer></script>
-  </body>
+</body>
+
 </html>

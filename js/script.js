@@ -12,10 +12,16 @@ const viewModel = function (locations, map) {
 
   //Create the markers and add the content to the infowidow
   self.allLocations.forEach(function (place) {
-  
+    if (place.url === undefined) {
+      place.url = "<b>Website is not avilable :(</b>";
+    }
+    else {
+      place.url = '<b><a href="' + place.url + '">' + place.name + '</a></b>';
+    }
 
     const infowindow = new google.maps.InfoWindow({
-      content: '<p class="h6">' + place.name + '</p>' + "<br>" + '<a href="' + place.url + '">' + " website" + '</a>'
+
+      content: '<p class="h6">' + place.name + '</p>' + "<br>" + place.url + "<br><a href=https://foursquare.com/v/" + place.id + ">source</a>"
     });
 
     const markerOptions = {
@@ -23,7 +29,7 @@ const viewModel = function (locations, map) {
       position: place.latLng,
       animation: google.maps.Animation.DROP,
       infowindow: infowindow,
-     
+
     };
     place.marker = new google.maps.Marker(markerOptions);
   });
@@ -31,8 +37,8 @@ const viewModel = function (locations, map) {
 
 
   // Output after the filter Places that can bee seen on the map after user input
-  self.visiblePlaces = ko.observableArray()
-  self.userInput = ko.observable("")
+  self.visiblePlaces = ko.observableArray();
+  self.userInput = ko.observable("");
 
 
 
@@ -42,7 +48,7 @@ const viewModel = function (locations, map) {
   self.filterMarkers = ko.computed(function () {
     let userInput = self.userInput().toLowerCase();
 
-    self.visiblePlaces.removeAll()
+    self.visiblePlaces.removeAll();
 
     self.allLocations.forEach(function (place) {
       place.marker.setMap(null);
@@ -53,74 +59,75 @@ const viewModel = function (locations, map) {
         self.visiblePlaces.push(place);
       }
 
-    })
+    });
 
     // add the markers into the map
     let bound = new google.maps.LatLngBounds();
     self.visiblePlaces().forEach(function (place) {
       place.marker.setMap(map);
-      bound.extend(place.marker.getPosition())
-      
+      bound.extend(place.marker.getPosition());
+
     });
     // Zoom and fit to the markers avilable position
-    map.fitBounds(bound)
-  }, this)
+    map.fitBounds(bound);
+  }, this);
 
 
   // Handle the user selection
-  self.selection = ko.observable()
+  self.selection = ko.observable();
   self.selectionCall = function (event) {
     // click the marker based on this selection
     if (event === undefined) {
-      console.log("NOt FounD")
+      console.log("NOt Found");
     }
-    marker = self.selection().marker
-    google.maps.event.trigger(marker, 'click')
+    marker = self.selection().marker;
+    google.maps.event.trigger(marker, 'click');
 
-  }
-  self.selection(self.visiblePlaces([1]))
+  };
+
+  self.selection(self.visiblePlaces([1]));
 
 
   self.visiblePlacesLength = ko.computed(function () {
-    let userinput = self.userInput()
-    let visiblePlaces = self.visiblePlaces()
+    let userinput = self.userInput();
+    let visiblePlaces = self.visiblePlaces();
     if (userinput === "") {
 
-      return "Select a Spot"
+      return "Select a Spot";
     }
 
-    if (visiblePlaces.length === 0){
-      return "Sorry no results for " + userinput + " :("
+    if (visiblePlaces.length === 0) {
+      return "Sorry no results for " + userinput + " :(";
     }
 
     else if (userinput !== -1) {
-    
-      return "results for " + userinput + " :  " + visiblePlaces.length
+
+      return "results for " + userinput + " :  " + visiblePlaces.length;
     }
 
 
-  })
+  });
 
 
   self.visiblePlaces().forEach(function (place) {
-    let marker = place.marker
+    let marker = place.marker;
 
 
     //add  markers info Window
     google.maps.event.addListener(marker, 'click', function () {
-      
+
 
       // close all infoWindows
-      self.closeInfoWindows(map)
+      self.closeInfoWindows(map);
 
       // Center marker
       map.setCenter(marker.getPosition());
-      map.setZoom(12)
-      
+      map.setZoom(12);
+
 
       // Bounce
-      this.setAnimation(google.maps.Animation.BOUNCE)
-      setTimeout(function(){ marker.setAnimation(null); }, 750);
+      this.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function () { marker.setAnimation(null); }, 750);
 
       //open infowindow  
       this.infowindow.open(map, this);
@@ -135,20 +142,23 @@ const viewModel = function (locations, map) {
 
 
 
-  })
+  });
 
 
   self.closeInfoWindows = function (map) {
     self.visiblePlaces().forEach(function (place) {
-      let marker = place.marker
+      let marker = place.marker;
       marker.infowindow.close(map, marker);
     });
-  }
+  };
 
 
 
 
-}
+};
+
+
+
 function initMap() {
 
 
@@ -157,66 +167,68 @@ function initMap() {
   const locations = [
     { title: "Smithsonian Space Musem", latLng: { lat: 38.8882, lng: -77.0199 } },
     { title: "United States Capitol", latLng: { lat: 38.8899, lng: -77.0091 } }
-  ]
+  ];
 
-  let array = []
+  let array = [];
 
 
   // API Fetch and error handlers
   function callApi() {
     return new Promise(
       data => {
-        let url = "https://api.foursquare.com/v2/venues/explore?near=DC&oauth_token=RESIPMEAGVEW15LFDBO5Z24PCGEF4SBG4FFCLXRNJA12NJKK&v=20180507"
+        let url = "https://api.foursquare.com/v2/venues/explore?near=DC&oauth_token=RESIPMEAGVEW15LFDBO5Z24PCGEF4SBG4FFCLXRNJA12NJKK&v=20180507";
 
 
+        // Organize data into a Place Constructor
+        function Place(dataObj) {
+          this.id = dataObj.id;
+          this.name = dataObj.name;
+          this.open = dataObj.hours.isOpen;
+          this.url = dataObj.url;
+          this.latLng = { lat: dataObj.location.lat, lng: dataObj.location.lng };
 
+        }
 
 
         fetch(url)
           .then(response => response.json())
 
           .then(function (myJson) {
-            let geocode = myJson.meta.code
-           
-            
+            let geocode = myJson.meta.code;
+
+
             if (geocode === 400) {
               $(document).ready(function () {
-                $("body").empty()
-                $("body").append("<p class='h1 mt-5 text-center'>"+ "Error " + geocode + "</br>   Oh No I failed you :( </p>" + "<p class='h4 text-muted text-center'>I was not able to connect to the database <br> Please try again later</p>")
-              })
+                $("body").empty();
+                $("body").append("<p class='h1 mt-5 text-center'>" + "Error " + geocode + "</br>   Oh No I failed you :( </p>" + "<p class='h4 text-muted text-center'>I was not able to connect to the database <br> Please try again later</p>");
+              });
             }
             else {
 
-              let center = myJson.response.geocode.center
-              let places = myJson.response.groups[0].items
-              placesArray = []
-              
-              // Organize data into a Place Constructor
-              function Place(dataObj) {
-                this.id = dataObj.id;
-                this.name = dataObj.name;
-                this.open = dataObj.hours.isOpen;
-                this.url = dataObj.url;
-                this.latLng = { lat: dataObj.location.lat, lng: dataObj.location.lng };
-                
-              }
+              let center = myJson.response.geocode.center;
+              let places = myJson.response.groups[0].items;
+
+
+              placesArray = [];
+
+
               places.forEach(function (place) {
-                
+
                 // Create the new object with the contructor and the push into the array
-                placesArray.push(new Place(place.venue))
-                
-              })
-              
-              return data([{ center: center }, placesArray])
+                placesArray.push(new Place(place.venue));
+
+              });
+
+              return data([{ center: center }, placesArray]);
             }
 
           })
           .catch(function (error) {
-            console.log(error)
+            console.log(error);
             $(document).ready(function () {
-              $("body").empty()
-              $("body").append("<p class='h1 mt-5 text-center'> Oh No I failed you :( </p>" + "<p class='h4 text-muted text-center'>I am experiencing an error <br> don't worry the code monkey is working on it</p>")
-            })
+              $("body").empty();
+              $("body").append("<p class='h1 mt-5 text-center'> Oh No I failed you :( </p>" + "<p class='h4 text-muted text-center'>I am experiencing an error <br> don't worry the code monkey is working on it</p>");
+            });
           });
 
 
@@ -226,7 +238,7 @@ function initMap() {
 
 
 
-    )
+    );
 
   }
 
@@ -239,27 +251,27 @@ function initMap() {
 
 
 
-// Async then start knockout 
+  // Async then start knockout 
+
   async function koStart() {
 
-    
-    let loc = await callApi()
+    let loc = await callApi();
 
 
     map = new google.maps.Map(document.getElementById('map'), {
       center: loc[0].center,
       zoom: 13
     });
-  
 
 
-    ko.applyBindings(new viewModel(loc[1], map))
+
+    ko.applyBindings(new viewModel(loc[1], map));
   }
 
 
-  koStart()
+  koStart();
 }
 
-function googleError(){
-  alert("google error")
-}
+function googleError() {
+  alert("google error");
+};
