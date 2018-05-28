@@ -94,7 +94,9 @@ const viewModel = function (locations, map) {
     if (event === undefined) {
       console.log("NOt Found");
     }
-    marker = self.selection().marker;
+    
+     let marker = self.selection().marker;
+    console.log()
     google.maps.event.trigger(marker, 'click');
 
   };
