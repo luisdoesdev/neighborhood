@@ -193,10 +193,13 @@ function initMap() {
 
 
         // Organize data into a Place Constructor
+
         function Place(dataObj) {
+          console.log(dataObj)
           this.id = dataObj.id;
           this.name = dataObj.name;
-          this.open = dataObj.hours.isOpen;
+          // Open change object changed to a filtering option
+          //this.open = dataObj.hours.isOpen;
           this.url = dataObj.url;
           this.latLng = { lat: dataObj.location.lat, lng: dataObj.location.lng };
 
