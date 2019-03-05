@@ -13,7 +13,7 @@ The intention of the app is not to be pretty but rather functional, it is part f
  Google Maps and foursquare(Paste API_URL on the script.js)    
 
 ### Starting the App
-    This app is not using any external libraries other than boostrap, knockout and google maps and they are connected with a cdn
+    This app is  using  external libraries/framerworka such as boostrap, knockout, foursquare and google maps.
 
     Just run the `index.html` and you are good to go
          
