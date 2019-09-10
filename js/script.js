@@ -156,7 +156,6 @@ function initMap() {
       // Organize data into a Place Constructor
 
       function Place(dataObj) {
-        console.log(dataObj);
         this.id = dataObj.id;
         this.name = dataObj.name;
         // Open change object changed to a filtering option
