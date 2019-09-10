@@ -140,11 +140,19 @@ const viewModel = function(locations, map) {
 };
 
 //Function to load map and start up app
+
 function initMap() {
   // start Map
+ /* 
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 38.9072, lng: -77.0369 },
     zoom: 13
+  });*/
+
+  mapboxgl.accessToken = 'pk.eyJ1IjoibGV0b3JydWVsbGEiLCJhIjoiY2p1ZTltMHY0MDE4aTRkcDAxYjBwOXk4NCJ9.pTNlgBocBN-ilKR_fiVhNg';
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9'
   });
 
   // API Fetch and error handlers
