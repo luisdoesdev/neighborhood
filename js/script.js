@@ -169,7 +169,7 @@ function initMap() {
 
       fetch(url)
         .then(response => response.json())
-
+        
         .then(function(myJson) {
           let geocode = myJson.meta.code;
 
@@ -225,6 +225,7 @@ function initMap() {
   }
 
   koStart();
+
 }
 
 function googleError() {

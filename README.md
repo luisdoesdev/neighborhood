@@ -17,3 +17,11 @@ The intention of the app is not to be pretty but rather functional, it is part f
 
     Just run the `index.html` and you are good to go
          
+# Refactoring MVC
+
+As of October 2020 the App has been refatored into an easier to understand Architecture.
+It still uses Knockout JS as it's main framework, rather than using one main file I split 
+the MVC into individual ones. This will make it easier to add more features. To see the old 
+MVC just head to the "script.js" file.
+
+Map has been changed from Google to Mapbox, easy decision, google is getting expensive.

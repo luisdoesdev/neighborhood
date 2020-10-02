@@ -16,7 +16,7 @@
 
   /* Map Controller */
   map.on('load', function() {
-     
+     // Adds the Map's Initial Markers
     let markers =  [
         {
         name: 'Washington Monument',
@@ -35,17 +35,26 @@
           }
     ]
 
+    for(let m of markers){
+      //console.log(m)
+      new mapboxgl.Marker()
+        .setLngLat([m.lng, m.lat])
+        .addTo(map);
+    }
+
+
     
     
+  
 
     
   });
 
+  function initApp(){console.log("hl")}
 
+  initApp()
 
+  })();
 
-  function callApi() {}
+ 
 
-
-
-})();

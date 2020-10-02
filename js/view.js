@@ -6,5 +6,5 @@ const view = function () {
         addMarker:addMarker
     }
 
-    
+
 }()
