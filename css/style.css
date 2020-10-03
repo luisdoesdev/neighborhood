@@ -13,9 +13,9 @@
 
       .marker{
         background-image: url('../mark_icon.svg');
-        background-size: cover;
+        background-size:cover;
         width: 55px ;
         height:85px;
-       
+        transform: translateY(-50px);
         cursor: pointer;
       }

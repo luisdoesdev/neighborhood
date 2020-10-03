@@ -31,3 +31,4 @@ Map has been changed from Google to Mapbox, easy decision, google is getting exp
 ### TODO
 
 Fix markers overlap
+Fix Markers position

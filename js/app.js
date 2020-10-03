@@ -52,11 +52,17 @@
     
   });
 
+  const viewModel = function(locations,map){
+    console.log(locations, map)
+  }
 
 
-  function initApp(){console.log("hl")}
+  function koStart(){
+    console.log("helllo");
+    ko.applyBindings(new viewModel("loc[1]", map));
+  }
 
-  initApp()
+  koStart()
 
   })();
 
