@@ -1,8 +1,8 @@
 (function initMap() {
   let intialVal = {
     name: 'Washington Monument',
-    lat: 38.8895,
-    lng: -77.0353
+    lat: 38.889455,
+    lng: -77.035218
   };
 
   mapboxgl.accessToken ='pk.eyJ1IjoibGV0b3JydWVsbGEiLCJhIjoiY2swZXI3ZXQ1MGtqNzNicG1yYTZzNHVodSJ9.TxyMy_xrdGKfY-sh47Pu4g';
@@ -10,7 +10,7 @@
     container: 'map', // container id
     style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
     center: [intialVal.lng, intialVal.lat], // starting position [lng, lat]
-    zoom: 15 // starting zoom
+    zoom: 12 // starting zoom
   });
 
 
@@ -20,24 +20,26 @@
     let markers =  [
         {
         name: 'Washington Monument',
-        lat: 38.8895,
-        lng: -77.0353
+        lat: 38.889455,
+        lng: -77.035218
         },
         {
-            name: 'Washington Monument',
-            lat: 38.8897,
-            lng: -77.0353
+            name: 'Capitol Building',
+            lat: 38.8899,
+            lng: -77.0091
         },
         {
-            name: 'Washington Monument',
-            lat: 38.8880,
-            lng: -77.0363
+            name: 'Lincoln Memorial',
+            lat: 38.889296,
+            lng: -77.050198
           }
     ]
 
     for(let m of markers){
       //console.log(m)
-      new mapboxgl.Marker()
+      let el = document.createElement('div');
+      el.className = 'marker';
+      new mapboxgl.Marker(el)
         .setLngLat([m.lng, m.lat])
         .addTo(map);
     }
@@ -49,6 +51,8 @@
 
     
   });
+
+
 
   function initApp(){console.log("hl")}
 

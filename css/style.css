@@ -1,11 +1,21 @@
   /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
        #map {
-        height: 100%;
+        height: 95vh;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
-        height: 95vh;
+        height: 100vh;
         margin: 0;
         padding: 0;
+        overflow: hidden;
+      }
+
+      .marker{
+        background-image: url('../mark_icon.svg');
+        background-size: cover;
+        width: 55px ;
+        height:85px;
+       
+        cursor: pointer;
       }

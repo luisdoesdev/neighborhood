@@ -25,3 +25,9 @@ the MVC into individual ones. This will make it easier to add more features. To 
 MVC just head to the "script.js" file.
 
 Map has been changed from Google to Mapbox, easy decision, google is getting expensive.
+
+
+
+### TODO
+
+Fix markers overlap
