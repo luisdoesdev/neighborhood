@@ -1,6 +1,4 @@
 const view = function () {
-    //let self = this;
-
     function addMarker(locations, map){
         console.log('locs',locations)
         locations.features.forEach(loc => {
@@ -10,36 +8,16 @@ const view = function () {
                 .setHTML(`<h3>${loc.properties.title}</h3>`))
                 .addTo(map)
         });
-        //locations.features.forEach((function(marker){}
-                        // create a HTML element for each feature
-            //var el = document.createElement('div');
-            //el.className = 'marker';
-
-            // make a marker for each feature and add to the map
-            /*
-            new mapboxgl.Marker()
-                .setLngLat(marker.geometry.coordinates)
-                .addTo(map);
-                }))
-        
-        
-
-    /*
-        map.on("load", function () {
-           map.addSource('locs',{
-               'type':'geojson',
-               data:self.allLocations
-             
-           })
-         
-
-        })
-        map.on('click', self.allLocations, function (e){console.log(e)})*/
+     
     }
     
+    function hideMarker(){
+        console.log('hello')
+    }
     
     return{
-        addMarker:addMarker
+        addMarker:addMarker,
+        hideMarker:hideMarker
     }
 
 

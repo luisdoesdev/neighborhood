@@ -77,7 +77,7 @@ const controller = function(){
 
     async function getPlaces(){
         let loc = await callApi()
-        console.log(loc)
+        //console.log(loc)
         return loc
         //return model.places
     }
