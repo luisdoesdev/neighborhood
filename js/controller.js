@@ -10,11 +10,20 @@ const controller = function(){
         
               function Place(dataObj) {
                 this.id = dataObj.id;
-                this.name = dataObj.name;
-                // Open change object changed to a filtering option
-                //this.open = dataObj.hours.isOpen;
+                this.type='FeatureCollection'
+                this.properties = {
+                  title:dataObj.name,
+                  description:'hello world'
+                }
+              
+                this.geometry={
+                  type:'Point',
+                  coordinates:[dataObj.location.lng, dataObj.location.lat]
+                }
+               
+                
                 this.url = dataObj.url;
-                this.latLng = { lat: dataObj.location.lat, lng: dataObj.location.lng };
+                //this.latLng = { lat: dataObj.location.lat, lng: dataObj.location.lng };
               }
         
               fetch(url)
@@ -37,15 +46,18 @@ const controller = function(){
                   } else {
                     let center = myJson.response.geocode.center;
                     let places = myJson.response.groups[0].items;
-                    let placesArray = []
+                    let geojson = {
+                      type:"featureCollection",
+                      features:[]
+                    }
                     places.forEach(function(place) {
                       // Create the new object with the contructor and the push into the array
-                      placesArray.push(new Place(place.venue));
-                      //console.log(place)
+                      geojson.features.push(new Place(place.venue));
+                      ///console.log(geojson)
                       //new Place(place.venue);
                     });
         
-                    return data([{ center: center }, placesArray]);
+                    return data([{ center: center }, geojson]);
                   }
                 })
                 .catch(function(error) {
@@ -65,8 +77,8 @@ const controller = function(){
 
     async function getPlaces(){
         let loc = await callApi()
+        console.log(loc)
         return loc
-        //console.log(loc)
         //return model.places
     }
     
