@@ -1,7 +1,11 @@
 const model = function(){
-    let places = ["hi"]
+    
+
+    function allPlaces(places){
+        console.log(places)
+    }
 
     return{
-        places:places
+        allPlaces:allPlaces
     }
 }()

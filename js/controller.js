@@ -1,5 +1,6 @@
 const controller = function(){
-
+    
+    
     function callApi(){
 
             return new Promise(data => {
@@ -74,18 +75,32 @@ const controller = function(){
 
 
     }
-
     async function getPlaces(){
+    
+      if (localStorage.getItem("allLocations") === null) {
         let loc = await callApi()
-        //console.log(loc)
+        localStorage.setItem('allLocations',JSON.stringify(loc));
+        let allLocations = localStorage.getItem('allLocations')
+        return allLocations
+        ///console.log(allLocations)
+      }
+      else{
+        console.log('')
+      }
+      /*
+        let loc = await callApi()
         return loc
-        //return model.places
+        */
     }
+
+   
+
+  
     
     
 
     return{
-        getPlaces:getPlaces
+      getPlaces:getPlaces
     }
 
 }();
