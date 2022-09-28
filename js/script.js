@@ -21,7 +21,7 @@ const viewModel = function (locations, map) {
     return `<div >
     <h3>${title}</h3>
     <a href="${url}">website</a>
-    <p>${description}</p>
+    <p>description missing</p>
     </div>`
   }
 
@@ -64,14 +64,6 @@ const viewModel = function (locations, map) {
       place.map.addTo(map)
     })  
 
-
-  
-
-
-    console.log(arrPos)
-
-    
-   
   }
 
     return self.userInput()
@@ -205,7 +197,7 @@ const viewModel = function (locations, map) {
     container: "map", // container id
     style: "mapbox://styles/mapbox/streets-v11", // stylesheet location
     center: [intialVal.lng, intialVal.lat], // starting position [lng, lat]
-    zoom: 12, // starting zoom
+    zoom: 14, // starting zoom
   });
 
   // API Fetch and error handlers
@@ -214,10 +206,9 @@ const viewModel = function (locations, map) {
       let url =
         "https://api.foursquare.com/v2/venues/explore?near=DC&oauth_token=RESIPMEAGVEW15LFDBO5Z24PCGEF4SBG4FFCLXRNJA12NJKK&v=20180507";
 
-      // Organize data into a Place Constructor
+      // Organize data into a Place consol
 
       function Place(dataObj) {
-        console.log(dataObj)
         this.id = dataObj.id;
         this.type = "FeatureCollection";
         this.properties = {
@@ -268,7 +259,6 @@ const viewModel = function (locations, map) {
           }
         })
         .catch(function (error) {
-          console.log(error);
           $(document).ready(function () {
             $("body").empty();
             $("body").append(
